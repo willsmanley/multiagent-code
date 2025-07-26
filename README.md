@@ -97,7 +97,7 @@ Since you will have this repo cloned locally and Claude Code just executes comma
 
 If you come up with any awesome ideas, consider writing an upstream PR!
 
-## Demo
+## Demo Video
 
 https://www.loom.com/share/99cb8f82c01f4213bf1c82ab4212a8fb
 
