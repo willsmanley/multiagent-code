@@ -36,19 +36,22 @@ I'm going to include other specific instructions here; the more, the better at t
 ```
 
 ## Key Principles
+
 Obviously parallelization is cool. But this toolchain is about much more than just sloppily running a lot of Claude Code instances at once.
 
 It is about these fundamental principles:
+
 - shorter context window improves coding reliability (https://arxiv.org/html/2505.07897v2)
 - shorter task length improves reliability (https://arxiv.org/html/2504.21751v2)
 - reflexion improves reliability (https://arxiv.org/abs/2303.11366)
 
 So we want to provide our AI coding agents with the smallest possible task and nothing more. We want the context to be short. We want the task to be well-defined and easily testable. And we want another agent to validate the output of the first agent.
 
-## Inspiration: Reliability Engineering
+## Inspiration: Agent Reliability Engineering
+
 There is a now-famous analysis by METR (https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) which shows that the length of a task that an AI coding agent can complete has been doubling every 7 months.
 
-While this fact has its own implications, the thing that interested me the most was that they measured it by completion with 80% reliability. 
+While this fact has its own implications, the thing that interested me the most was that they measured it by completion with 80% reliability.
 
 That got me thinking - can we stack on redundancy layers and distillation steps to improve frontier model performance to move the needle closer to 100%?
 
@@ -58,9 +61,10 @@ Anecdotally, the answer seems to be yes. We would appreciate help in benchmarkin
 
 ## How it works
 
-Multiagent Code decomposes big coding problems into many small, parallel jobs handled by AI agents. 
+Multiagent Code decomposes big coding problems into many small, parallel jobs handled by AI agents.
 
 There are 3 generalist agent types:
+
 - **Orchestrator**: you interact directly with this one via the top-level interactive Claude Code instance. The Orchestrator's job is to break the task down into atomic jobs and assign those off to Manager agents with a custom prompt for each job.
 - **Manager**: Each manager is assigned one very small job (ex: edit this one file) and deploys a single worker to execute the code changes. The manager is only responsible for reviewing the final output and marking it as pass/fail. It can work collaboratively with the worker if required.
 - **Worker**: This is the only agent that actually makes the code changes. It receives instructions from the manager. The manager will optionally provide follow-up instructions until the quality is satisfactory.
@@ -68,7 +72,7 @@ There are 3 generalist agent types:
 The pipeline rests on four key processes:
 
 1. **Interpolative Prompting**  
-   Using a detailed instruction prompt for the Orchestrator, we tell it how to write a simple bash script that creates N custom prompts, one for each job. Each prompt will usually share a lot of static content based on the task, along with some dynamic fields (such as the specific file that is assigned to this job).  
+   Using a detailed instruction prompt for the Orchestrator, we tell it how to write a simple bash script that creates N custom prompts, one for each job. Each prompt will usually share a lot of static content based on the task, along with some dynamic fields (such as the specific file that is assigned to this job).
 
 2. **Hierarchical Delegation & Reflexion**  
    Each prompt goes to a _manager_ agent, who immediately delegates the work to a _worker_ agent. The manager then audits the result; if anything is missing it resumes the same worker session with targeted feedback. This self-critique loop ("reflexion") greatly improves reliability without human review (See 2023 Reflexion paper: https://arxiv.org/abs/2303.11366)
