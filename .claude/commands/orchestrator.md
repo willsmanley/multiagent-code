@@ -34,7 +34,7 @@ Example todo structure:
 If you need to follow up with a specific manager after failure, you can resume using the session ID from the logs:
 
 ```
-claude --resume "some-session-id-here" -p "specific correction instructions" >> multiagent-code/temp/run-123/responses/task_name_worker.json 2>&1
+claude --resume "some-session-id-here" -p "specific correction instructions" >> $MULTIAGENT_CODE_DIR/temp/run-123/responses/task_name_worker.json 2>&1
 ```
 
 ## Writing Effective Manager Prompts
@@ -67,10 +67,10 @@ If the prompts are each different (for example, one backend prompt and one front
 Make sure to appropriately plan and then break down the problem so you can farm it off efficiently. Remember, LLM coding agents do much better on tasks that are simple and narrow. If you can, give one file to each manager and nothing more.
 
 Save anything you'd like to these directories:
-multiagent-code/temp/run-123/prompts
-multiagent-code/temp/run-123/responses
-multiagent-code/temp/run-123/scripts
-multiagent-code/temp/run-123/misc
+$MULTIAGENT_CODE_DIR/temp/run-123/prompts
+$MULTIAGENT_CODE_DIR/temp/run-123/responses
+$MULTIAGENT_CODE_DIR/temp/run-123/scripts
+$MULTIAGENT_CODE_DIR/temp/run-123/misc
 
 ## Log File Structure
 
@@ -78,13 +78,13 @@ The orchestration system creates two log files per task for complete visibility:
 
 **Manager Logs** (created by orchestrator launch script):
 
-- `multiagent-code/temp/run-123/responses/task_name_manager.json`
+- `$MULTIAGENT_CODE_DIR/temp/run-123/responses/task_name_manager.json`
 - Contains manager-level activity, worker delegation, and final results
 - Includes manager's quality review and retry decisions
 
 **Worker Logs** (created by manager when delegating):
 
-- `multiagent-code/temp/run-123/responses/task_name_worker.json`
+- `$MULTIAGENT_CODE_DIR/temp/run-123/responses/task_name_worker.json`
 - Contains detailed worker activity with `--verbose` output
 - Includes all tool calls, file operations, and worker reasoning
 - Captures both stdout and stderr from worker sessions
@@ -106,16 +106,16 @@ If you are reading this file, it is because you are the orchestrator. Please fol
 
 ```bash
 # 1. Create run directory structure
-RUN_ID=$(multiagent-code/setup_run.sh | grep "Run ID:" | cut -d' ' -f3)
+RUN_ID=$($MULTIAGENT_CODE_DIR/setup_run.sh | grep "Run ID:" | cut -d' ' -f3)
 
-# 2. Create your prompt files in multiagent-code/temp/$RUN_ID/prompts/
+# 2. Create your prompt files in $MULTIAGENT_CODE_DIR/temp/$RUN_ID/prompts/
 # (Write them manually or create a script to generate them)
 
 # 3. Launch all managers in parallel
-multiagent-code/launch_managers.sh $RUN_ID
+$MULTIAGENT_CODE_DIR/launch_managers.sh $RUN_ID
 
 # 4. Monitor completion
-multiagent-code/monitor.sh $RUN_ID [timeout_minutes]
+$MULTIAGENT_CODE_DIR/monitor.sh $RUN_ID [timeout_minutes]
 ```
 
 ### Available Scripts
@@ -123,41 +123,41 @@ multiagent-code/monitor.sh $RUN_ID [timeout_minutes]
 **setup_run.sh** - Creates directory structure for a new orchestration run
 
 ```bash
-multiagent-code/setup_run.sh [custom_run_id]
+$MULTIAGENT_CODE_DIR/setup_run.sh [custom_run_id]
 ```
 
-- Creates `multiagent-code/temp/run-xxx/` with subdirs: `prompts/`, `responses/`, `scripts/`, `misc/`
+- Creates `$MULTIAGENT_CODE_DIR/temp/run-xxx/` with subdirs: `prompts/`, `responses/`, `scripts/`, `misc/`
 - Outputs the run ID for use with other scripts
 
 **launch_managers.sh** - Launches Claude managers for all prompt files in parallel
 
 ```bash
-multiagent-code/launch_managers.sh <run_id>
+$MULTIAGENT_CODE_DIR/launch_managers.sh <run_id>
 ```
 
-- Finds all `.md` files in `multiagent-code/temp/<run_id>/prompts/`
+- Finds all `.md` files in `$MULTIAGENT_CODE_DIR/temp/<run_id>/prompts/`
 - Launches one manager per prompt file in parallel using proper logging
-- Logs each manager to `multiagent-code/temp/<run_id>/responses/<task_name>_manager.json`
+- Logs each manager to `$MULTIAGENT_CODE_DIR/temp/<run_id>/responses/<task_name>_manager.json`
 - Saves process info for monitoring
 
 **monitor.sh** - Monitors running managers and processes results as they complete
 
 ```bash
-multiagent-code/monitor.sh <run_id> [timeout_minutes]
+$MULTIAGENT_CODE_DIR/monitor.sh <run_id> [timeout_minutes]
 ```
 
 - Default timeout: 30 minutes
 - Processes completed tasks immediately (no waiting for all)
 - Shows success/failure status in real-time
 - Handles failed tasks with session extraction for retry
-- Creates `multiagent-code/temp/<run_id>/failures.log` if any tasks fail
+- Creates `$MULTIAGENT_CODE_DIR/temp/<run_id>/failures.log` if any tasks fail
 
 ### Manual Setup (if needed)
 
 If you need to create directories manually:
 
 ```bash
-RUN_ID="run-$(date +%s)" && mkdir -p multiagent-code/temp/$RUN_ID/prompts multiagent-code/temp/$RUN_ID/responses multiagent-code/temp/$RUN_ID/scripts multiagent-code/temp/$RUN_ID/misc && echo $RUN_ID
+RUN_ID="run-$(date +%s)" && mkdir -p $MULTIAGENT_CODE_DIR/temp/$RUN_ID/prompts $MULTIAGENT_CODE_DIR/temp/$RUN_ID/responses $MULTIAGENT_CODE_DIR/temp/$RUN_ID/scripts $MULTIAGENT_CODE_DIR/temp/$RUN_ID/misc && echo $RUN_ID
 ```
 
 ## Script-Based Orchestration
@@ -176,7 +176,7 @@ If you need to create many similar prompts, write a generation script:
 #!/bin/bash
 set -e
 RUN_ID="$1" && shift
-BASE_DIR="multiagent-code/temp/$RUN_ID"
+BASE_DIR="$MULTIAGENT_CODE_DIR/temp/$RUN_ID"
 
 COUNTER=1
 for item in "$@"; do
@@ -200,10 +200,10 @@ See `PROMPT_SCRIPTING_GUIDE.md` for detailed examples.
 
 ## Orchestrator Process
 
-1. **Setup**: Use `multiagent-code/setup_run.sh` to create run directory
+1. **Setup**: Use `$MULTIAGENT_CODE_DIR/setup_run.sh` to create run directory
 2. **Plan**: Break down the task and create specific prompt files (manually or via script)
-3. **Launch**: Use `multiagent-code/launch_managers.sh` to start all managers
-4. **Monitor**: Use `multiagent-code/monitor.sh` to track progress
+3. **Launch**: Use `$MULTIAGENT_CODE_DIR/launch_managers.sh` to start all managers
+4. **Monitor**: Use `$MULTIAGENT_CODE_DIR/monitor.sh` to track progress
 5. **Process**: The monitoring script handles completed tasks automatically
 6. **Recover**: Retry failed tasks using session IDs from logs
 7. **Report**: Review final summary and verify all outputs

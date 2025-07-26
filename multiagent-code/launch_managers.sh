@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to launch managers for all prompts in a run directory
-# Usage: multiagent-code/launch_managers.sh <run_id>
+# Usage: $REPO_DIR/launch_managers.sh <run_id>
 
 set -e
 
@@ -83,4 +83,4 @@ echo "Process IDs saved to: $BASE_DIR/pids.txt"
 echo "Task names saved to: $BASE_DIR/tasks.txt"
 echo ""
 echo "To monitor progress, run:"
-echo "  multiagent-code/monitor.sh $RUN_ID"
+echo "  $REPO_DIR/monitor.sh $RUN_ID"

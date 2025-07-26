@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to monitor completion of managers
-# Usage: multiagent-code/monitor.sh <run_id> [timeout_minutes]
+# Usage: $REPO_DIR/monitor.sh <run_id> [timeout_minutes]
 
 set -e
 
@@ -107,7 +107,7 @@ handle_failed_task() {
 monitor_completion() {
     local run_id="$1"
     local timeout_minutes="$2"
-    local base_dir="multiagent-code/temp/$run_id"
+    local base_dir="$REPO_DIR/temp/$run_id"
 
     # Read process info
     if [[ ! -f "$base_dir/pids.txt" ]]; then

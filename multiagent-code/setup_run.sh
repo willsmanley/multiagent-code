@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Simple script to create run directory structure
-# Usage: multiagent-code/setup_run.sh [custom_run_id]
+# Usage: $REPO_DIR/setup_run.sh [custom_run_id]
 
 RUN_ID="${1:-run-$(date +%s)}"
 REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
@@ -15,5 +15,5 @@ echo "Run ID: $RUN_ID"
 echo ""
 echo "Next steps:"
 echo "1. Create your prompt files in: $BASE_DIR/prompts/"
-echo "2. Launch managers: multiagent-code/launch_managers.sh $RUN_ID"
-echo "3. Monitor progress: multiagent-code/monitor.sh $RUN_ID"
+echo "2. Launch managers: $REPO_DIR/launch_managers.sh $RUN_ID"
+echo "3. Monitor progress: $REPO_DIR/monitor.sh $RUN_ID"
