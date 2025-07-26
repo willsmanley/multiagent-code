@@ -53,7 +53,7 @@ There is a now-famous analysis by METR (https://metr.org/blog/2025-03-19-measuri
 
 While this fact has its own implications, the thing that interested me the most was that they measured it by completion with _80% reliability_.
 
-That got me thinking - can we stack on redundancy layers and distillation steps to improve frontier model performance to move the needle closer to 100%?
+That got me thinking - can we stack on redundancy layers and distillation steps to improve frontier model performance to move the needle closer to 100%? In other words, could two redundant tasks at 80% reliability each result in one overall task with 96% accuracy?
 
 For example, if we break a very long task down into subtasks and have a separate agent complete each one independently, does this improve the overall reliability of the system? If we add on a reflexion layer, does that further improve our results?
 
