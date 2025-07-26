@@ -51,7 +51,7 @@ So we want to provide our AI coding agents with the smallest possible task and n
 
 There is a now-famous analysis by METR (https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) which shows that the length of a task that an AI coding agent can complete has been doubling every 7 months.
 
-While this fact has its own implications, the thing that interested me the most was that they measured it by completion with 80% reliability.
+While this fact has its own implications, the thing that interested me the most was that they measured it by completion with _80% reliability_.
 
 That got me thinking - can we stack on redundancy layers and distillation steps to improve frontier model performance to move the needle closer to 100%?
 
