@@ -25,7 +25,7 @@ claude --dangerously-skip-permissions
 I'm going to include other specific instructions here; the more, the better at this stage because as an Orchestrator Agent you will distill down what is important for each agent. :) "
 ```
 
-### 3. Start the Orchestrator Agent
+### 4. Start the Orchestrator Agent Inside Claude Code
 
 ```bash
 # First prompt loads the agent instructions
