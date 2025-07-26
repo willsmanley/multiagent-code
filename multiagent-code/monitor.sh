@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Script to monitor completion of managers
-# Usage: $REPO_DIR/monitor.sh <run_id> [timeout_minutes]
+# Usage: $MULTIAGENT_CODE_DIR/monitor.sh <run_id> [timeout_minutes]
 
 set -e
 
 # Use environment variable or infer repo directory
-REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")" && pwd)}"
 
 RUN_ID="$1"
 TIMEOUT_MINUTES="${2:-30}"  # Default 30 minute timeout

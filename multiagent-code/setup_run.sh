@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Simple script to create run directory structure
-# Usage: $REPO_DIR/setup_run.sh [custom_run_id]
+# Usage: $MULTIAGENT_CODE_DIR/setup_run.sh [custom_run_id]
 
 RUN_ID="${1:-run-$(date +%s)}"
-REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")" && pwd)}"
 BASE_DIR="$REPO_DIR/temp/$RUN_ID"
 
 mkdir -p "$BASE_DIR/prompts" "$BASE_DIR/responses" "$BASE_DIR/scripts" "$BASE_DIR/misc"

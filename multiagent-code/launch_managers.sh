@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Script to launch managers for all prompts in a run directory
-# Usage: $REPO_DIR/launch_managers.sh <run_id>
+# Usage: $MULTIAGENT_CODE_DIR/launch_managers.sh <run_id>
 
 set -e
 
 # Use provided environment variable or infer repo directory
-REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")/.." && pwd)}"
+REPO_DIR="${MULTIAGENT_CODE_DIR:-$(cd "$(dirname "$0")" && pwd)}"
 
 RUN_ID="$1"
 

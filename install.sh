@@ -43,7 +43,8 @@ add_line_if_missing() {
 }
 
 # Add environment variable & alias to common shell rc files
-ENV_LINE="export MULTIAGENT_CODE_DIR=\"$REPO_DIR\""
+CODE_DIR="$(cd "$REPO_DIR/multiagent-code" && pwd)"
+ENV_LINE="export MULTIAGENT_CODE_DIR=\"$CODE_DIR\""
 ALIAS_LINE="alias mac=\"cd \$MULTIAGENT_CODE_DIR\""
 for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
   touch "$rc"
