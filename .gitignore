@@ -21,3 +21,11 @@ Icon?
 
 # Multiagent run logs
 temp/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
