@@ -14,7 +14,7 @@ git clone https://github.com/willsmanley/multiagent-code && chmod +x multiagent-
 claude --dangerously-skip-permissions
 ```
 
-> _Recommendation: only yolo on a VM with internet disconnected. Google Cloud Workstations or similar offering is great for this._
+> _Recommendation: use caution with yolo mode - for example, set up a dev box sandbox. Google Cloud Workstations or similar offering is great for this._
 
 ### 3. Write a detailed prompt
 
